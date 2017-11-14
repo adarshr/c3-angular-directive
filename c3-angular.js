@@ -1,4 +1,4 @@
-/*! c3-angular - v1.3.1 - 2017-10-16
+/*! c3-angular - v1.4.1 - 2017-11-14
 * https://github.com/jettro/c3-angular-directive
 * Copyright (c) 2017 ; Licensed  */
 angular.module('gridshore.c3js.chart', []);
@@ -1109,6 +1109,7 @@ function ChartController($scope, $timeout) {
 
     this.addGauge = addGauge;
     this.addGaugeLabelFormatFunction = addGaugeLabelFormatFunction;
+    this.addGaugeLabelExtentsFunction = addGaugeLabelExtentsFunction;
 
     this.addBar = addBar;
 
@@ -1330,6 +1331,10 @@ function ChartController($scope, $timeout) {
         if ($scope.gaugeLabelFormatFunction) {
             config.gauge.label = config.gauge.label || {};
             config.gauge.label.format = $scope.gaugeLabelFormatFunction;
+        }
+        if ($scope.gaugeLabelExtentsFunction) {
+            config.gauge.label = config.gauge.label || {};
+            config.gauge.label.extents = $scope.gaugeLabelExtentsFunction;
         }
         if ($scope.point != null) {
             config.point = $scope.point;
@@ -1652,6 +1657,10 @@ function ChartController($scope, $timeout) {
 
     function addGaugeLabelFormatFunction(gaugeLabelFormatFunction) {
         $scope.gaugeLabelFormatFunction = gaugeLabelFormatFunction;
+    }
+
+    function addGaugeLabelExtentsFunction(gaugeLabelExtentsFunction) {
+        $scope.gaugeLabelExtentsFunction = gaugeLabelExtentsFunction;
     }
 
     function addBar(bar) {
@@ -2068,13 +2077,17 @@ function ChartGauge () {
         if (attrs.labelFormatFunction) {
             chartCtrl.addGaugeLabelFormatFunction(scope.labelFormatFunction());
         }
+        if (attrs.labelExtentsFunction) {
+            chartCtrl.addGaugeLabelExtentsFunction(scope.labelExtentsFunction());
+        }
     };
 
     return {
         require: '^c3chart',
         restrict: 'E',
         scope: {
-            'labelFormatFunction': "&"
+            'labelFormatFunction': "&",
+            'labelExtentsFunction': "&"
         },
         replace: true,
         link: gaugeLinker
